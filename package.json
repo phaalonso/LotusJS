@@ -1,0 +1,17 @@
+{
+  "name": "DiscordJS",
+  "version": "1.0.0",
+  "main": "App.js",
+  "author": "Pedro Alonso",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon App.js"
+  },
+  "dependencies": {
+    "axios": "^0.19.1",
+    "discord.js": "^11.5.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
+}
