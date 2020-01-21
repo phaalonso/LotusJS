@@ -1,4 +1,5 @@
 const api = require('./services/api');
+const filter_order = require('./utils/filter_order');
 
 module.exports = {
     name: 'price',
@@ -13,31 +14,24 @@ module.exports = {
             .then((response) => {
                 const { orders } = response.data.payload;
                 console.log(orders);
-                const newArray = orders.filter(({ order_type, user }) => {
-                        return order_type === 'sell' && (user.status === 'ingame' || user.status === 'online');
-                    })
-                    .sort((it1, it2) => {
-                        if (it1.platinum < it2.platinum)
-                            return -1;
-                        else if (it1.platinum > it2.platinum)
-                            return 1;
-                        else
-                            return 0;
-                    });
+                const newArray = filter_order(orders);
+
+                // Get the min and max price of the items in the array
                 const minPrice = newArray[0].platinum;
-                const maxPrice = newArray.pop().platinum;
-                console.log('Min price:', minPrice);
-                console.log('Max price:', maxPrice);
-                let reply = `Item name: ${args.join('_').toLowerCase()}\n   Min Price: ${minPrice}`;
+                const maxPrice = newArray[newArray.length - 1].platinum;
+                // console.log('Min price:', minPrice);
+                // console.log('Max price:', maxPrice);
+
+                let reply = `Item name: ${itemName}\n\tMin Price: ${minPrice}`;
                 for(i = 0; (i < newArray.length && i < 5); i ++) {
-                    reply += `\n   Item[${i + 1}]: ${newArray[i].platinum} platinum | Quantity: ${newArray[i].quantity}`;
+                    reply += `\n\tItem[${i + 1}]: ${newArray[i].platinum} platinum | Quantity: ${newArray[i].quantity}`;
                 }
 
-                reply += `\n   Max Price: ${maxPrice}`;
+                reply += `\n\tMax Price: ${maxPrice}`;
                 return message.channel.send(reply);
             })
             .catch((error) => {
-                console.error(error.data);
+                console.error(error);
                 return message.channel.send(`Sorry, i can't find the item: ${itemName}`);
             });
     },

@@ -14,7 +14,7 @@ module.exports = {
                 // console.log('Response', response.data.payload.item);
                 const data = response.data
                 console.log('Data', data);
-                let reply = `Item searched: ${args.join(' ').toLowerCase()}\n`;
+                let reply = `Item searched: ${itemName}\n`;
                 reply += 'Parts Found:\n';
 
                 data.payload.item.items_in_set.map( item => {
@@ -22,9 +22,9 @@ module.exports = {
                     console.log(info);
                     if (!info.item_name.endsWith('Set')) {
                         if (info.drop.length) {
-                            reply += `${info.item_name} dropped in: `;
+                            reply += `\t${info.item_name} dropped in: `;
                             const { drop } = item;
-                            info.drop.map(drop => { reply += `\n    \`${drop.name}\``; });
+                            info.drop.map(drop => { reply += `\n\t\t\`${drop.name}\``; });
                             reply += '\n';
                         } else {
                             reply += `Sorry we can't localize yet the drop location of relics`;
