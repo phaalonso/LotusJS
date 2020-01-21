@@ -12,7 +12,10 @@ module.exports = {
         await api.get(`/items/${itemName}/orders`)
             .then((response) => {
                 const { orders } = response.data.payload;
-                const newArray = orders.filter(({ order_type }) => {return order_type === 'sell'})
+                console.log(orders);
+                const newArray = orders.filter(({ order_type, user }) => {
+                        return order_type === 'sell' && (user.status === 'ingame' || user.status === 'online');
+                    })
                     .sort((it1, it2) => {
                         if (it1.platinum < it2.platinum)
                             return -1;
