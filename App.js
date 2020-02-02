@@ -21,7 +21,7 @@ client.on('ready', () => {
 client.on('message', async msg => {
     if (!msg.content.startsWith(prefix) || msg.author.bot) return;
 
-    const args = msg.content.slice(prefix.length).split(/ +/);
+    const args = msg.content.slice(prefix.length).toLowerCase().split(/ +/);
     console.log('Args', args);
 
     const commandName = args.shift().toLowerCase();

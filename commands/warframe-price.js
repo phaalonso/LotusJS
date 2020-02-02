@@ -1,4 +1,4 @@
-const api = require('./services/api');
+const { WarframeMarket } = require('./services/api');
 const filter_order = require('./utils/filter_order');
 
 module.exports = {
@@ -10,7 +10,7 @@ module.exports = {
         const itemName = args.join('_').toLowerCase();
         console.log('Price', itemName);
 
-        await api.get(`/items/${itemName}/orders`)
+        await WarframeMarket.get(`/items/${itemName}/orders`)
             .then((response) => {
                 const { orders } = response.data.payload;
                 console.log(orders);
@@ -19,8 +19,6 @@ module.exports = {
                 // Get the min and max price of the items in the array
                 const minPrice = newArray[0].platinum;
                 const maxPrice = newArray[newArray.length - 1].platinum;
-                // console.log('Min price:', minPrice);
-                // console.log('Max price:', maxPrice);
 
                 let reply = `Item name: ${itemName}\n\tMin Price: ${minPrice}`;
                 for(i = 0; (i < newArray.length && i < 5); i ++) {
