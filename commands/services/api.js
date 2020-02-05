@@ -4,36 +4,42 @@ const WarframeDropData = axios.create({
     baseURL: 'http://drops.warframestat.us/data'
 });
 
-const writeDropData = async (newHash) => {
+const writeDropData = async ({ data }) => {
     // Write the data in the storage
     const response = await WarframeDropData.get('/all.json');
     // console.log(response);
-    fs.writeFileSync('hash.json', JSON.stringify(newHash),'utf8');
-    fs.writeFileSync('data.json', JSON.stringify(response.data), 'utf8');
+    fs.writeFileSync('./data/hash.json', JSON.stringify(data), 'utf8');
+    fs.writeFileSync('./data/data.json', JSON.stringify(response.data), 'utf8');
+    console.log('Creating files');
 }
 
 exports.WarframeDrop = async function () {
     //Initialize the WarframeDropData System by storing the data in disk
     const hash = await WarframeDropData.get('/info.json')
-        .then((response) => {
-            console.log('OI');
-            fs.readFileSync('hash.json', 'utf8', (err, data) => {
-                console.log(err);
-                if (err) {
-                    //Hash file with the time stamp of the data don't exist
-                    console.log('Hash file doesnt exist!');
-                    writeDropData(response.data);
-                } else {
-                    console.log('Hash file exists!');
-                    console.log(data);
-                    obj = JSON.parse(data);
-                    console.log(obj);
-                }
-            });
-        })
-        .catch(err => {
-            console.error(err);
-        });
+    const response = await WarframeDropData.get('/all.json');
+    fs.readFile('./data/hash.json', 'utf8', (err, dataFile) => {
+        if (err) {
+            if (err.errno == -4058) {
+                //Hash file with the time stamp of the data don't exist
+                console.log('Hash file doesnt exist!');
+                writeDropData(hash);
+            }
+            /* Another error ocurred! */
+            console.error('Error', err);
+        } else {
+            // console.log(err);
+            console.log('Hash file exists!');
+            DataFile = JSON.parse(dataFile);
+            console.log(`Internet ->`, hash.data);
+            console.log('Data File->', DataFile);
+            if (hash.data.timestamp != DataFile.timestamp) {
+                console.log('New data found...\nDownloading the new data!');
+                writeDropData(hash);
+            } else {
+                console.log('The file is actualized!');
+            }
+        }
+    });
 }
 
 exports.WarframeMarket = axios.create({
