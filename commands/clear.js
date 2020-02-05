@@ -6,7 +6,6 @@ module.exports = {
     async execute(message, args) {
         amount = args[0];
         if (isNaN(amount)) return message.reply('The amount parameter is not a number!');
-
         message.channel.bulkDelete(amount, true)
             .catch( err => {
                 console.error(err);

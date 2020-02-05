@@ -20,13 +20,14 @@ module.exports = {
                 const minPrice = newArray[0].platinum;
                 const maxPrice = newArray[newArray.length - 1].platinum;
 
-                let reply = `Item name: ${itemName}\n\tMin Price: ${minPrice}`;
+                const reply = []
+                reply.push(`Item name: ${itemName}\n\tMin Price: ${minPrice}`);
                 for(i = 0; (i < newArray.length && i < 5); i ++) {
-                    reply += `\n\tItem[${i + 1}]: ${newArray[i].platinum} platinum | Quantity: ${newArray[i].quantity}`;
+                    reply.push(`\n\tSell Order[${i + 1}]: ${newArray[i].platinum} platinum | Quantity: ${newArray[i].quantity}`);
                 }
 
-                reply += `\n\tMax Price: ${maxPrice}`;
-                return message.channel.send(reply);
+                reply.push(`\n\tMax Price: ${maxPrice}`);
+                return message.channel.send(''.concat(reply));
             })
             .catch((error) => {
                 console.error(error);
