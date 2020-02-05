@@ -6,17 +6,16 @@ const WarframeDropData = axios.create({
 
 const writeDropData = async ({ data }) => {
     // Write the data in the storage
-    const response = await WarframeDropData.get('/all.json');
-    // console.log(response);
+    const allData = await WarframeDropData.get('/all.json');
+
     fs.writeFileSync('./data/hash.json', JSON.stringify(data), 'utf8');
-    fs.writeFileSync('./data/data.json', JSON.stringify(response.data), 'utf8');
+    fs.writeFileSync('./data/data.json', JSON.stringify(allData.data), 'utf8');
     console.log('Creating files');
 }
 
 exports.WarframeDrop = async function () {
     //Initialize the WarframeDropData System by storing the data in disk
     const hash = await WarframeDropData.get('/info.json')
-    const response = await WarframeDropData.get('/all.json');
     fs.readFile('./data/hash.json', 'utf8', (err, dataFile) => {
         if (err) {
             if (err.errno == -4058) {
